@@ -1,0 +1,81 @@
+SUPER in JS
+
+super() -> used to access:
+
+    1) properties on an object literal 
+    2) or class's [Prototype], or 
+    3) invoke a superclass's constructor
+
+super.prop AND super[expr] expressions ->
+
+are valid in any method definition in both CLASSES and OBJECT LITERALS
+
+super(...args) expression ->
+is valid in class constructors
+
+SYNTAX:
+a) super([arguments]) // calls parent constructor
+b) super.propertyOnParent
+c) super[expression]
+
+DESCRIPTION:
+- super keywork can be used in two ways:
+
+    1. as a function calls
+        super(...args)
+
+    2. property look up
+        super.prop 
+        super[expr]
+
+- super is NOT a variable
+
+- in the constructor body of a derived class (with 'extends'), the 'super' keyword may appear as a 'function call' (super(...args)), which must be called BEFORE the 'this' keyword is used and BEFORE the constructor returns
+
+- it calls the parent class's constructor and binds the parent class's public fields, after which the derived class's constructor can further access and modify 'this'
+
+- "property lookup" form can be used to access methods and properties of an object literal's or class's [[Prototype]]
+
+- w/in a class's body, the referece of "super" can be either the superclass's constructor itself, or the the constructor's PROTOTYPE, depending on whether the execution context is instance creation or class initialization
+
+- NOTE: the reference of "super" is determined by the class or object literal 'super' was declared in, NOT the object the method is called on
+
+- therefore, unbinding or re-binding a method doesn't change the reference of super in it (but it DOES change the reference of "this")
+
+USING SUPER IN CLASSES
+
+In this example, super() is called to avoid duplication the constructor parts' that are common between classes "Rectangle" and "Square"
+
+    class Rectangle {
+        constructor(height, width) {
+            this.name = "Rectangle";
+            this.height = height;
+            this.width = width;
+        }
+
+        sayName() {
+            console.log(`Hi, I am a ${this.name}.`);
+        }
+
+        get area() {
+            return this.height * this.width;
+        }
+
+        set area(value) {
+            this._area = value;
+        }
+    }
+
+    class Square extends Rectangle {
+        // Here, it calls the parent class's constructor with lengths
+
+        constructor(length) {
+            // provided for the Rectangle's width and height:
+
+            super(length, length);
+
+            // Note: In derived classes, super() must be called before you can use 'this'. Moving this to the top causes a ReferenceError:
+
+            this.name = "Square";
+        }
+    }
